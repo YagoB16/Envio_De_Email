@@ -93,7 +93,7 @@
         $mail->Port = 587;
 
         //Remetente
-        $mail->setFrom('', ''); //segundo paramêtro será o nome que identifica o e-mail enviado
+        $mail->setFrom('', ''); //primeiro paramêtro será o e-mail do remetente, segundo paramêtro será o nome que identifica o e-mail enviado
 
         //Destinatário
         $mail->addAddress($email, $nome);
