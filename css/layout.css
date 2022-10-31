@@ -252,5 +252,28 @@ button {
     display: flex;
 }
 #logo-footer{
-    width: 2%;
+    width: 40px;
+}
+
+.fundo{
+  position: relative;
+  width: 100%;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+}
+
+.fundo .bruxa{
+    position: relative;
+    animation: animate 5.5s ease-in-out infinite ;
+}
+
+@keyframes animate {
+  
+  0%{
+    transform: translateX(-1px);
+  }
+  50%{
+    transform:  translateX(900px);
+  }
 }
