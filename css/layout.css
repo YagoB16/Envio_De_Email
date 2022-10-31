@@ -154,6 +154,7 @@ input:internal-autofill-selected {
 
 .msg-box {
     padding-top: 5%;
+    font-size: 25px;
 }
 
 #msg {
