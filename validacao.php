@@ -10,6 +10,8 @@
 
 <body>
     <?php
+    date_default_timezone_set('America/Sao_Paulo');
+
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
@@ -18,7 +20,6 @@
     require './lib/vendor/autoload.php';
 
     //Variáveis do Formulário
-
     $assunto = $_POST['assunto'];
     $nome = $_POST['nome'];
     $email = $_POST['email'];
@@ -101,8 +102,8 @@
         //Conteúdo da mensagem
 
         $mail->isHTML(true);
-        $mail->Subject = $assunto;
-        $mail->Body = $arquivo;
+        $mail->Subject = $assunto; // Assunto do e-mail
+        $mail->Body = $arquivo; // Mensagem com maior volume 
 
 
         $mail->AltBody = 'Este é o corpo da mensagem para e-mails sem html disponivel';
