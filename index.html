@@ -9,63 +9,61 @@
         type="text/css" />
     <link href="//db.onlinewebfonts.com/c/6b43dc31ba4fb1a3478a21e4118a54bc?family=Ravenscroft" rel="stylesheet"
         type="text/css" />
-    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="respon.css">
     <link rel="shortcut icon" href="img/chapeu-de-bruxa.png">
     <title>Formulário</title>
 </head>
 
-<body class="container">
+<body class="container-body">
     <header class="container-header">
         <h1>Formulario Halloween</h1>
     </header>
     <main class="container-main">
-        <section class="container-biografia">
-            <div class="div-bio">
-                <h2 style="font-size: 40px;">Seja Bem-vindo</h2>
-                <p style="font-size: 35px; font-family: Ravenscroft;">Olá, me chamo Yago Barbosa, fiz esse projeto de formulário como forma de
-                    estudo sobre
-                    PHPMailer, uma biblioteca de código para enviar e-mails com segurança através da linguagem PHP.</p><br>
-                <p style="font-size: 35px; font-family: Ravenscroft;">Halloween, ou Dia das Bruxas, é uma celebração popular de culto aos mortos
-                    comemorada anualmente no
-                    dia 31 de outubro. A cultura de celebração do Halloween é muito forte em países de língua
-                    anglo-saxônica, sobretudo nos Estados Unidos. Com o tempo, o feriado ganhou popularidade e hoje é
-                    comemorado, ainda que em menor escala, em boa parte do mundo.</p>
-            </div>
-        </section>
-        <section class="container-form">
-            <div class="div-form">
-                <form action="validacao.php" name="form_contato" method="post" autocomplete="off">
+        <div class="div-bio">
+            <h2>Seja Bem-vindo</h2>
+            <p>Olá, me chamo Yago Barbosa, fiz esse projeto de formulário como forma de
+                estudo sobre
+                PHPMailer, uma biblioteca de código para enviar e-mails com segurança através da linguagem PHP.</p>
+            <p>Halloween, ou Dia das Bruxas, é uma celebração popular de culto aos mortos
+                comemorada anualmente no
+                dia 31 de outubro. A cultura de celebração do Halloween é muito forte em países de língua
+                anglo-saxônica, sobretudo nos Estados Unidos. Com o tempo, o feriado ganhou popularidade e hoje é
+                comemorado, ainda que em menor escala, em boa parte do mundo.</p>
+        </div>
+        <div class="div-form">
+            <form action="validacao.php" name="form_contato" method="post" autocomplete="off">
 
-                    <div class="form__group field">
-                        <input type="input" class="form__field" name="nome" id="nome" autocomplete="off" placeholder="Nome" required />
-                        <label for="nome" class="form__label">Nome</label>
-                    </div>
+                <div class="form__group field">
+                    <input type="input" class="form__field" name="nome" id="nome" autocomplete="off" placeholder="Nome"
+                        required />
+                    <label for="nome" class="form__label">Nome</label>
+                </div>
 
-                    
-                    <div class="form__group field">
-                        <input type="text" class="form__field" name="telefone" id="telefone"  autocomplete="off" placeholder="Telefone">
-                        <label for="telefone" class="form__label">Telefone</label>
-                    </div>
-                    <div class="form__group field">
-                        <input type="input" class="form__field" name="email" id="email" placeholder="Email">
-                        <label for="email" class="form__label">Email</label>
-                    </div>
-                    
-                    <div class="form__group field">
-                        <input type="text" class="form__field" name="assunto" id="assunto" placeholder="Assunto">
-                        <label for="assunto" class="form__label">Assunto</label>
-                    </div>
 
-                    <div class="msg-box">
-                        <label for="mensagem" style="font-family: Exquisite Corpse;">Mensagem</label>
-                        <textarea name="mensagem" id="msg" cols="10" rows="5" placeholder="Sua mensagem"></textarea>
-                    </div>
-                    <div class="btn"> 
-                        <button type="submit" class="custom-btn btn-11">Enviar</button>
-                    </div>
-                </form>
-            </div>
-        </section>
+                <div class="form__group field">
+                    <input type="text" class="form__field" name="telefone" id="telefone" autocomplete="off"
+                        placeholder="Telefone">
+                    <label for="telefone" class="form__label">Telefone</label>
+                </div>
+                <div class="form__group field">
+                    <input type="input" class="form__field" name="email" id="email" placeholder="Email">
+                    <label for="email" class="form__label">Email</label>
+                </div>
+
+                <div class="form__group field">
+                    <input type="text" class="form__field" name="assunto" id="assunto" placeholder="Assunto">
+                    <label for="assunto" class="form__label">Assunto</label>
+                </div>
+
+                <div class="msg-box">
+                    <label for="mensagem" style="font-family: Exquisite Corpse;">Mensagem</label>
+                    <textarea name="mensagem" id="msg" cols="10" rows="5" placeholder="Sua mensagem"></textarea>
+                </div>
+                <div class="btn">
+                    <button type="submit" class="custom-btn btn-11">Enviar</button>
+                </div>
+            </form>
+        </div>
     </main>
     <footer class="container-footer">
         <img id="logo-footer" src="img/bruxa.png" alt="">
