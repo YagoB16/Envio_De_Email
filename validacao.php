@@ -85,8 +85,8 @@
         $mail->isSMTP(); //Definiu o tipo de protocolo que será usado para envio do e-mail
         $mail->SMTPAuth = true; //Habilitar autenticação SMTP(Simple Mail Transfer Protocol)
 
-        $mail->Username = ''; //E-mail que será utilizado para comunicação
-        $mail->Password = ''; //Senha para envio, "necessária autenticação em 2 fatores na conta Google e criar uma "senha de apps" para usar especificamente para SMTP" 
+        $mail->Username = 'shaolinmataporco696@gmail.com'; //E-mail que será utilizado para comunicação
+        $mail->Password = 'ghoronxkamiplpsh'; //Senha para autorização de uso, "necessária autenticação em 2 fatores na conta Google e criar uma "senha de apps" para usar especificamente para SMTP" 
 
         $mail->SMTPSecure = 'tls';
 
@@ -94,7 +94,7 @@
         $mail->Port = 587;
 
         //Remetente
-        $mail->setFrom('', ''); //primeiro paramêtro será o e-mail do remetente, segundo paramêtro será o nome que identifica o e-mail enviado
+        $mail->setFrom('shaolinmataporco696@gmail.com', 'Shaolin Contatos'); //primeiro paramêtro será o e-mail do remetente, segundo paramêtro será o nome que identifica o e-mail enviado
 
         //Destinatário
         $mail->addAddress($email, $nome);
