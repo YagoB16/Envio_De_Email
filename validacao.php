@@ -31,52 +31,27 @@
     //Estilização de e-mail
     $arquivo = "
     <style type='text/css'>
-        body {
-            margin: 0px;
-            font-family: Verdane;
-            font-size: 12px;
-            color: #666666;
-        }
-    
-        a {
-            color: #666666;
-            text-decoration: none;
-        }
-    
-        a:hover {
-            color: #FF0000;
-            text-decoration: none;
-        }
-    </style>
-    <html>
-    <table width='510' border='1' cellpadding='1' cellspacing='1' bgcolor='#CCCCCC'>
-       
-            <td>
-                <tr>
-                    <td width='500'>Nome:$nome</td>
-                </tr>
-    
-                <tr>
-                    <td width='320'>E-mail:<b>$email</b></td>
-                </tr>
-    
-                <tr>
-                    <td width='320'>Telefone:<b>$telefone</b></td>
-                </tr>
-                  
-                <tr>
-                    <td width='320'>Mensagem:$mensagem</td>
-                </tr>
-    
-            </td>
-        
-    
-        <tr>
-            <td>Este e-mail foi enviado em <b>$data_envio</b> às <b>$hora_envio</b></td>
-        </tr>
-    </table>
-    
-    </html>
+    body {
+        margin: 0px;
+        font-family: Verdane;
+        font-size: 12px;
+        color: #6F30AB;
+    }
+   
+</style>
+<html>
+<body style='padding: 50px; font-family: Arial, Helvetica, sans-serif;'>
+    <div style='border: 0.1px solid black; padding: 30px; text-align:center; background:#C18EE2;'>
+        <h1 style='font-size: 40px;'>Olá</h1>
+    </div>
+    <div style='border: 1px solid; text-align:start; padding: 13px; background-color: aliceblue;'>
+        <div style='padding: 30px 0 40px 10px; font-size: 23px;'>Olá, você recebeu um aviso de $nome</div>
+        <div style='padding:0 0 20px 10px; font-size: 23px;'>Telefone para contato: $telefone</div>
+        <div style='text-align: center; font-size:30px;'>Mensagem</div>
+        <div style='color:black; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align: start; font-size:18px; padding: 10px 10px; border:2px solid #6F30AB; border-radius: 10px; '>$mensagem</div>
+    </div>
+</body>
+</html>
     ";
 
     $mail = new PHPMailer(true);
