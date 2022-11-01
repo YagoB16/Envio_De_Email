@@ -1,0 +1,44 @@
+html {
+    min-height: 100%;
+    background: rgb(23, 13, 1);
+    background: linear-gradient(229deg,
+            rgba(23, 13, 1, 1) 10%,
+            rgba(198, 65, 4, 1) 38%,
+            rgba(219, 86, 8, 1) 100%);
+}
+
+.container-main {
+    display: flex;
+}
+
+#logo-footer {
+    width: 40px;
+}
+
+.fundo {
+    position: relative;
+    width: 100%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+}
+
+.fundo .bruxa {
+    position: relative;
+    animation: animate 5.5s ease-in-out infinite;
+}
+
+@keyframes animate {
+
+    0% {
+        transform: translateX(-1px);
+    }
+
+    50% {
+        transform: translateX(900px);
+    }
+
+    95% {
+        transform: rotate(100deg);
+    }
+}

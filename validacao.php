@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
     <title>Document</title>
 </head>
 
@@ -37,7 +38,7 @@
         font-size: 12px;
         color: #6F30AB;
     }
-   
+
 </style>
 <html>
 <body style='padding: 50px; font-family: Arial, Helvetica, sans-serif;'>
@@ -94,7 +95,13 @@
     }
     ?>
     <div>
-
+    <main class="container-main">
+        <div class="fundo">
+            <div class="bruxa">
+                <img id="logo-footer" src="img/bruxa.png" alt="">
+            </div>
+        </div>
+    </main>
     </div>
 </body>
 
