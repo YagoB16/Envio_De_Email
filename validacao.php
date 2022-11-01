@@ -48,7 +48,7 @@
         <div style='padding: 30px 0 40px 10px; font-size: 23px;'>Olá, você recebeu um aviso de $nome</div>
         <div style='padding:0 0 20px 10px; font-size: 23px;'>Telefone para contato: $telefone</div>
         <div style='text-align: center; font-size:30px;'>Mensagem</div>
-        <div style='color:black; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align: start; font-size:18px; padding: 10px 10px; border:2px solid #6F30AB; border-radius: 10px; '>$mensagem</div>
+        <div style='color:black; text-align: start; font-size:18px; padding: 10px 10px; border:2px solid #6F30AB; border-radius: 10px; '>$mensagem</div>
     </div>
 </body>
 </html>
