@@ -1,108 +1,128 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<?php
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
-    <title>Document</title>
-</head>
+namespace EnviarEmail;
 
-<body>
-    <?php
-    date_default_timezone_set('America/Sao_Paulo');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
-    use PHPMailer\PHPMailer\SMTP;
-
-    require './lib/vendor/autoload.php';
-
-    //Variáveis do Formulário
-    $assunto = $_POST['assunto'];
-    $nome = $_POST['nome'];
-    $email = $_POST['email'];
-    $telefone = $_POST['telefone'];
-    $mensagem = $_POST['mensagem'];
-    $data_envio = date('d/m/Y');
-    $hora_envio = date('H:i:s');
-
-    //Estilização de e-mail
-    $arquivo = "
-    <style type='text/css'>
-    body {
-        margin: 0px;
-        font-family: Verdane;
-        font-size: 12px;
-        color: #6F30AB;
+class EnviarEmail
+{
+    protected function __construct() {
+        // date_default_timezone_set('America/Sao_Paulo');
+        $this->config = new \stdClass;
+        $this->config->typeSend = 'smtp'; // nativo, smtp
+        $this->config->Username = 'teste@teste.com'; // login
+        $this->config->Password = 'qawsedrf@#'; // senha
+        $this->config->Port = 587;
+        $this->config->Host = 'smtp.gmail.com';
+        // Mensagem que vai ser enviada ao cliente
+        $this->config->subjectCliente = 'Obrigado por falar conosco';
+        $this->config->mensagemCliente = '
+    
+        ';
+      // Mensagem que vai ser enviada para o dono do site
+    $this->config->mensagemEmpresa = '
+        <html>
+            <body>
+                Mensagem: $mensagem<br>
+                Nome: $nome<br>
+                Email: $email<br>
+                Mensagem: $dataEnvio<br>
+                Mensagem: $horaEnvio<br>
+            </body>
+        </html>
+    ';
     }
 
-</style>
-<html>
-<body style='padding: 50px; font-family: Arial, Helvetica, sans-serif;'>
-    <div style='border: 0.1px solid black; padding: 30px; text-align:center; background:#C18EE2;'>
-        <h1 style='font-size: 40px;'>Olá</h1>
-    </div>
-    <div style='border: 1px solid; text-align:start; padding: 13px; background-color: aliceblue;'>
-        <div style='padding: 30px 0 40px 10px; font-size: 23px;'>Olá, você recebeu um aviso de $nome</div>
-        <div style='padding:0 0 20px 10px; font-size: 23px;'>Telefone para contato: $telefone</div>
-        <div style='text-align: center; font-size:30px;'>Mensagem</div>
-        <div style='color:black; text-align: start; font-size:18px; padding: 10px 10px; border:2px solid #6F30AB; border-radius: 10px; '>$mensagem</div>
-    </div>
-</body>
-</html>
-    ";
+    public function model()
+    {
+        
+        // Validar nome, email, subject e mensagem
+        if (isset($_POST['enviar-form'])) :
+            $erros = array();
+            if (
+                (!isset($_POST['nome'])) ||
+                (empty($_POST['nome'])) ||
+                (strlen($_POST['nome']) < 3)
+            ) {
+                $this->erro[] = 'Nome inválido';
+            }
+            if (
+                (!isset($_POST['email'])) ||
+                (empty($_POST['email']))
+            ) {
+                $this->erro[] = 'Informar e-mail';
+            }
+            if ($this->valida_email($_POST['email']) === false) {
+                $this->erro[] = 'Email inválido';
+            }
 
-    $mail = new PHPMailer(true);
+            /** validar os outros */
 
-    try {
-        $mail->isSMTP(); //Definiu o tipo de protocolo que será usado para envio do e-mail
-        $mail->SMTPAuth = true; //Habilitar autenticação SMTP(Simple Mail Transfer Protocol)
+            if (!isset($this->erro)) {
+                $this->dadosEnvio = array();
+                $this->dadosEnvio['name'] = $_POST['nome'];
+                $this->dadosEnvio['email'] = $_POST['email'];
+                $this->dadosEnvio['subject'] = $_POST['assunto'];
+                $this->dadosEnvio['message'] = $_POST['mensagem'];
+                // Faça o envio de acordo com o envio escolhido
 
-        $mail->Username = ''; //E-mail que será utilizado para comunicação
-        $mail->Password = ''; //Senha para autorização de uso, "necessária autenticação em 2 fatores na conta Google e criar uma "senha de apps" para usar especificamente para SMTP" 
+            }
+        endif;
+    }
 
-        $mail->SMTPSecure = 'tls';
 
-        $mail->Host = 'smtp.gmail.com';
+    public function parserString($array, $string)
+    {
+
+        foreach ($array as $key => $value) {
+            $string = str_replace('[' . $key . ']', $value, $string);
+        }
+        return $string;
+    }
+
+    public function valida_email($email)
+    {
+        if (function_exists('filter_var')) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL) == FALSE) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            if (preg_match('/^(?:[\w\!\#\$\%\&\'\\+\-\/\=\?\^\`\{\|\}\~]+\.)[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/', $email) == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    public function envioSmtp()
+    {
+        $mail = new PHPMailer(true);
+        $mail->isSMTP(true);
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'tls'; // Criptografia do envio SSL também é aceito
+        $mail->Username = 'goyagoba@gmail.com'; // Autenticação do Email
+        $mail->Password = 'alqezukuhvoahupl';
         $mail->Port = 587;
+        $mail->Host = 'smtp.gmail.com';
+        $mail->setFrom('goyagoba@gmail.com', 'Olá'); //Define o Remetente
+        $mail->addAddress('ybarbosa1608@gmail.com', 'yago'); // Define o destinatário
+        $mail->isHTML(true); // Seta o formato do e-mail para aceitar conteúdo HTML
+        $mail->Body= $this->config->mensagemCliente;
 
-        //Remetente
-        $mail->setFrom('', ''); //primeiro paramêtro será o e-mail do remetente, segundo paramêtro será o nome que identifica o e-mail enviado
+        if (!isset($this->erro)) { //Se não  houver nenhum erro na validação  de dados ele fará uma nova verificação 
+        try {
+            $mail->send();
 
-        //Destinatário
-        $mail->addAddress($email, $nome);
-
-        //Conteúdo da mensagem
-
-        $mail->isHTML(true);
-        $mail->Subject = $assunto; // Assunto do e-mail
-        $mail->Body = $arquivo; // Mensagem com maior volume 
-
-
-        $mail->AltBody = 'Este é o corpo da mensagem para e-mails sem html disponivel';
-
-        //Enviar
-        $mail->send();
-
-        echo "<script>alert('Mensagem enviada com sucesso!');</script>";
-        echo " <h2>Olá, seu aviso foi enviado para o e-mail digitado no formulário.</h2>";
-        echo "<meta http-equiv='refresh' content='5;URL=index.html'>";
-    } catch (Exception $e) {
-        echo "Mensagem não foi enviada. Mailer error: {$mail->ErrorInfo}";
+            echo "<script>alert('Mensagem enviada com sucesso!');</script>";
+            echo " <h2>Olá, seu aviso foi enviado para o e-mail digitado no formulário.</h2>";
+            //echo "<meta http-equiv='refresh' content='5;URL=index.php'>";
+        } catch (Exception $e) {
+            echo "Mensagem não foi enviada. Mailer error: {$mail->ErrorInfo}";
+        }
     }
-    ?>
-    <div>
-    <main class="container-main">
-        <div class="fundo">
-            <div class="bruxa">
-                <img id="logo-footer" src="img/bruxa.png" alt="">
-            </div>
-        </div>
-    </main>
-    </div>
-</body>
-
-</html>
+}
+}
