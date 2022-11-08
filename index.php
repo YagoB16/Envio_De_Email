@@ -11,6 +11,18 @@
 
 <body>
 
+    <form action="" method="POST">
+        <input type="text" name="nome" id="nome" autocomplete="off" placeholder="Nome" required>
+        <label for="nome">Nome</label><br>
+        <input type="input" name="email" id="email" autocomplete="off" placeholder="email" required>
+        <label for="email">Email</label><br>
+        <input type="text" name="assunto" id="assunto" autocomplete="off" placeholder="assunto" required>
+        <label for="email">Assunto</label><br>
+        <input type="text" name="mensagem" id="mensagem" autocomplete="off" placeholder="mensagem" required>
+        <label for="email">Mensagem</label><br>
+        <input type="submit" value="Enviar" name="enviar-form">
+    </form>
+
     <?php
 
     use EnviarEmail\EnviarEmail;
@@ -20,24 +32,12 @@
     require './lib/vendor/autoload.php';
     require_once 'validacao.php';
 
-    $envio = new EnviarEmail;
-    $envio->model();
-    
-    $envio->envioSmtp();
-    var_dump($envio);
-    
+
+    $envio = new EnviarEmail();
+
+
+
     ?>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-        <input type="text" name="nome" id="nome" autocomplete="off" placeholder="Nome">
-        <label for="nome">Nome</label>
-        <input type="input" name="email" id="email" autocomplete="off" placeholder="email">
-        <label for="email">Email</label>
-        <input type="input" name="assunto" id="assunto" autocomplete="off" placeholder="assunto">
-        <label for="email">assunto</label>
-        <input type="input" name="mensagem" id="mensagem" autocomplete="off" placeholder="mensagem">
-        <label for="email">mensagem</label>
-        <input type="submit" value="enviar" name="enviar-form">
-    </form>
 </body>
 
 </html>

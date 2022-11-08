@@ -1,43 +1,29 @@
 <?php
 
 namespace EnviarEmail;
+error_reporting(0);
+use PHPMailer\PHPMailer\{PHPMailer, Exception};
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+require_once './lib/vendor/autoload.php';
+define('MAIL_HOST', 'smtp.gmail.com');
+define('MAIL_PORT',   587);
+define('MAIL_USER',  'goyagoba@gmail.com');
+define('MAIL_PASS', 'alqezukuhvoahupl');
 
-
-class EnviarEmail
+class EnviarEmail extends PHPMailer
 {
-    protected function __construct() {
-        // date_default_timezone_set('America/Sao_Paulo');
-        $this->config = new \stdClass;
-        $this->config->typeSend = 'smtp'; // nativo, smtp
-        $this->config->Username = 'teste@teste.com'; // login
-        $this->config->Password = 'qawsedrf@#'; // senha
-        $this->config->Port = 587;
-        $this->config->Host = 'smtp.gmail.com';
-        // Mensagem que vai ser enviada ao cliente
-        $this->config->subjectCliente = 'Obrigado por falar conosco';
-        $this->config->mensagemCliente = '
-    
-        ';
-      // Mensagem que vai ser enviada para o dono do site
-    $this->config->mensagemEmpresa = '
-        <html>
-            <body>
-                Mensagem: $mensagem<br>
-                Nome: $nome<br>
-                Email: $email<br>
-                Mensagem: $dataEnvio<br>
-                Mensagem: $horaEnvio<br>
-            </body>
-        </html>
-    ';
+
+    public function __construct()
+    {
+
+        $this->mail = new PHPMailer(true);
+        $this->model();
+        $this->envioSmtp();
     }
 
-    public function model()
+    private function model()
     {
-        
+
         // Validar nome, email, subject e mensagem
         if (isset($_POST['enviar-form'])) :
             $erros = array();
@@ -48,17 +34,33 @@ class EnviarEmail
             ) {
                 $this->erro[] = 'Nome inválido';
             }
+
             if (
                 (!isset($_POST['email'])) ||
                 (empty($_POST['email']))
             ) {
                 $this->erro[] = 'Informar e-mail';
+                
             }
-            if ($this->valida_email($_POST['email']) === false) {
+            if ($this->valida_email($_POST['email']) == false) {
                 $this->erro[] = 'Email inválido';
             }
 
-            /** validar os outros */
+            if (
+                (!isset($_POST['subject'])) ||
+                (empty($_POST['subject']))
+            ) {
+                $this->erro[] = 'Informe o assunto';
+            }
+            if (
+                (!isset($_POST['mensagem'])) ||
+                (empty($_POST['mensagem']))
+            ) {
+                $this->erro[] = 'Informar mensagem';
+                
+            }
+
+            /* validar os outros */
 
             if (!isset($this->erro)) {
                 $this->dadosEnvio = array();
@@ -66,14 +68,23 @@ class EnviarEmail
                 $this->dadosEnvio['email'] = $_POST['email'];
                 $this->dadosEnvio['subject'] = $_POST['assunto'];
                 $this->dadosEnvio['message'] = $_POST['mensagem'];
-                // Faça o envio de acordo com o envio escolhido
 
+                
+                $this->dadosEnvio['name'] = $this->parserString($this->dadosEnvio['name'], $_POST['nome']);
+                $this->dadosEnvio['email'] = $this->parserString($this->dadosEnvio['email'], $_POST['email']);
+                $this->dadosEnvio['subject'] = $this->parserString($this->dadosEnvio['subject'], $_POST['assunto']);
+                $this->dadosEnvio['message'] = $this->parserString($this->dadosEnvio['message'], $_POST['mensagem']);
+            }
+            if (isset($this->erro)) {
+                foreach($this->erro as $erro){
+                    var_dump($erro);
+                }
             }
         endif;
     }
 
 
-    public function parserString($array, $string)
+    protected function parserString($array, $string)
     {
 
         foreach ($array as $key => $value) {
@@ -82,7 +93,7 @@ class EnviarEmail
         return $string;
     }
 
-    public function valida_email($email)
+    protected function valida_email($email)
     {
         if (function_exists('filter_var')) {
             if (filter_var($email, FILTER_VALIDATE_EMAIL) == FALSE) {
@@ -98,31 +109,51 @@ class EnviarEmail
             }
         }
     }
-    public function envioSmtp()
+
+    protected function envioSmtp()
     {
-        $mail = new PHPMailer(true);
-        $mail->isSMTP(true);
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tls'; // Criptografia do envio SSL também é aceito
-        $mail->Username = 'goyagoba@gmail.com'; // Autenticação do Email
-        $mail->Password = 'alqezukuhvoahupl';
-        $mail->Port = 587;
-        $mail->Host = 'smtp.gmail.com';
-        $mail->setFrom('goyagoba@gmail.com', 'Olá'); //Define o Remetente
-        $mail->addAddress('ybarbosa1608@gmail.com', 'yago'); // Define o destinatário
-        $mail->isHTML(true); // Seta o formato do e-mail para aceitar conteúdo HTML
-        $mail->Body= $this->config->mensagemCliente;
+        $this->mail->CharSet = 'UTF-8';
+        $this->mail->isSMTP(true);
+        $this->mail->SMTPAuth = true;
+        $this->mail->SMTPSecure = 'tls'; // Criptografia do envio SSL também é aceito
+        $this->mail->Username = MAIL_USER; // Autenticação do Email
+        $this->mail->Password = MAIL_PASS;
+        $this->mail->Port = MAIL_PORT;
+        $this->mail->Host = MAIL_HOST;
 
-        if (!isset($this->erro)) { //Se não  houver nenhum erro na validação  de dados ele fará uma nova verificação 
-        try {
-            $mail->send();
+        //Define o Remetente
+        $this->mail->setFrom('goyagoba@gmail.com', 'Ola');
 
-            echo "<script>alert('Mensagem enviada com sucesso!');</script>";
-            echo " <h2>Olá, seu aviso foi enviado para o e-mail digitado no formulário.</h2>";
-            //echo "<meta http-equiv='refresh' content='5;URL=index.php'>";
-        } catch (Exception $e) {
-            echo "Mensagem não foi enviada. Mailer error: {$mail->ErrorInfo}";
+
+        //Define email para resposta
+        $this->mail->addReplyTo('goyagoba@gmail.com');
+
+
+        //Define o assunto do email
+        if (strlen($this->dadosEnvio['subject']) > 0) {
+            $this->mail->Subject = ($this->dadosEnvio['subject']);
+        }
+
+        //Define o email em cópia
+        $this->mail->addCC('ybarbosa1608@gmail.com', 'Cópia ' . ($this->dadosEnvio['subject']));
+
+
+        // Define o destinatário
+        if (strlen($this->dadosEnvio['email']) > 0) {
+            $this->mail->AddAddress($this->dadosEnvio['email'], $this->dadosEnvio['name']);
+        }
+
+        // Seta o formato do e-mail para aceitar conteúdo HTML
+        $this->mail->isHTML(true);
+        $conteudo = $this->dadosEnvio['message'];
+        $this->mail->msgHTML($conteudo);
+
+
+        if (!$this->mail->send()) {
+            echo 'Não foi possível enviar a mensagem.<br>';
+            echo 'Erro: ' . $this->mail->ErrorInfo;
+        } else {
+            echo 'Mensagem enviada.';
         }
     }
-}
 }
