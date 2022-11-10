@@ -1,10 +1,11 @@
 <?php
 
 namespace EnviarEmail;
-error_reporting(0);
+
 use PHPMailer\PHPMailer\{PHPMailer, Exception};
 
 require_once './lib/vendor/autoload.php';
+
 define('MAIL_HOST', 'smtp.gmail.com');
 define('MAIL_PORT',   587);
 define('MAIL_USER',  'goyagoba@gmail.com');
@@ -18,72 +19,13 @@ class EnviarEmail extends PHPMailer
 
         $this->mail = new PHPMailer(true);
         $this->model();
+    }
+
+    public function disparaEmail()
+    {
         $this->envioSmtp();
     }
-
-    private function model()
-    {
-
-        // Validar nome, email, subject e mensagem
-        if (isset($_POST['enviar-form'])) :
-            $erros = array();
-            if (
-                (!isset($_POST['nome'])) ||
-                (empty($_POST['nome'])) ||
-                (strlen($_POST['nome']) < 3)
-            ) {
-                $this->erro[] = 'Nome inválido';
-            }
-
-            if (
-                (!isset($_POST['email'])) ||
-                (empty($_POST['email']))
-            ) {
-                $this->erro[] = 'Informar e-mail';
-                
-            }
-            if ($this->valida_email($_POST['email']) == false) {
-                $this->erro[] = 'Email inválido';
-            }
-
-            if (
-                (!isset($_POST['subject'])) ||
-                (empty($_POST['subject']))
-            ) {
-                $this->erro[] = 'Informe o assunto';
-            }
-            if (
-                (!isset($_POST['mensagem'])) ||
-                (empty($_POST['mensagem']))
-            ) {
-                $this->erro[] = 'Informar mensagem';
-                
-            }
-
-            /* validar os outros */
-
-            if (!isset($this->erro)) {
-                $this->dadosEnvio = array();
-                $this->dadosEnvio['name'] = $_POST['nome'];
-                $this->dadosEnvio['email'] = $_POST['email'];
-                $this->dadosEnvio['subject'] = $_POST['assunto'];
-                $this->dadosEnvio['message'] = $_POST['mensagem'];
-
-                
-                $this->dadosEnvio['name'] = $this->parserString($this->dadosEnvio['name'], $_POST['nome']);
-                $this->dadosEnvio['email'] = $this->parserString($this->dadosEnvio['email'], $_POST['email']);
-                $this->dadosEnvio['subject'] = $this->parserString($this->dadosEnvio['subject'], $_POST['assunto']);
-                $this->dadosEnvio['message'] = $this->parserString($this->dadosEnvio['message'], $_POST['mensagem']);
-            }
-            if (isset($this->erro)) {
-                foreach($this->erro as $erro){
-                    var_dump($erro);
-                }
-            }
-        endif;
-    }
-
-
+    
     protected function parserString($array, $string)
     {
 
@@ -110,6 +52,61 @@ class EnviarEmail extends PHPMailer
         }
     }
 
+    private function model()
+    {
+
+        // Validar nome, email, subject e mensagem
+        if (isset($_POST['submit'])) {
+            $erro = array();
+            if (
+                (!isset($_POST['nome'])) ||
+                (empty($_POST['nome'])) ||
+                (strlen($_POST['nome']) < 3)
+            ) {
+                $this->erro[] = 'Nome inválido';
+            }
+
+            if (
+                (!isset($_POST['email'])) ||
+                (empty($_POST['email']))
+            ) {
+                $this->erro[] = 'Informar e-mail';
+            }
+            if ($this->valida_email($_POST['email']) == false) {
+                $this->erro[] = 'Email inválido';
+            }
+
+            if (
+                (!isset($_POST['assunto'])) ||
+                (empty($_POST['assunto']))
+            ) {
+                $this->erro[] = 'Informe o assunto';
+            }
+            if (
+                (!isset($_POST['mensagem'])) ||
+                (empty($_POST['mensagem']))
+            ) {
+                $this->erro[] = 'Informar mensagem';
+            }
+
+            
+            /* validar os outros */
+
+            if (!isset($this->erro)) {
+                $this->dadosEnvio = array();
+                $this->dadosEnvio['name'] = $_POST['nome'];
+                $this->dadosEnvio['email'] = $_POST['email'];
+                $this->dadosEnvio['subject'] = $_POST['assunto'];
+                $this->dadosEnvio['message'] = $_POST['mensagem'];
+
+
+                $this->dadosEnvio['name'] = $this->parserString($this->dadosEnvio['name'], $_POST['nome']);
+                $this->dadosEnvio['email'] = $this->parserString($this->dadosEnvio['email'], $_POST['email']);
+                $this->dadosEnvio['subject'] = $this->parserString($this->dadosEnvio['subject'], $_POST['assunto']);
+                $this->dadosEnvio['message'] = $this->parserString($this->dadosEnvio['message'], $_POST['mensagem']);
+            }
+        };
+    }
     protected function envioSmtp()
     {
         $this->mail->CharSet = 'UTF-8';
@@ -130,18 +127,17 @@ class EnviarEmail extends PHPMailer
 
 
         //Define o assunto do email
-        if (strlen($this->dadosEnvio['subject']) > 0) {
-            $this->mail->Subject = ($this->dadosEnvio['subject']);
-        }
+
+        $this->mail->Subject = ($this->dadosEnvio['subject']);
 
         //Define o email em cópia
         $this->mail->addCC('ybarbosa1608@gmail.com', 'Cópia ' . ($this->dadosEnvio['subject']));
 
 
         // Define o destinatário
-        if (strlen($this->dadosEnvio['email']) > 0) {
-            $this->mail->AddAddress($this->dadosEnvio['email'], $this->dadosEnvio['name']);
-        }
+
+        $this->mail->AddAddress($this->dadosEnvio['email'], $this->dadosEnvio['name']);
+
 
         // Seta o formato do e-mail para aceitar conteúdo HTML
         $this->mail->isHTML(true);
