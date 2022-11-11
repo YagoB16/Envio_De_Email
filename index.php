@@ -81,8 +81,8 @@
     }
 
     ?>
-
-    <?php if (isset($envio->erro)) : ?>
+ <?php if (isset($envio->erro)) : ?>
+        <h1>Houve erro nas informações</h1>
         <ul>
             <?php foreach ($envio->erro as $erro) : ?>
                 <li><?= $erro; ?></li>
