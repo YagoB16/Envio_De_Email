@@ -25,7 +25,7 @@ class EnviarEmail extends PHPMailer
     {
         $this->envioSmtp();
     }
-    
+
     protected function parserString($array, $string)
     {
 
@@ -55,24 +55,24 @@ class EnviarEmail extends PHPMailer
     private function model()
     {
 
+        $nomeSobrenome =  (explode(" ", trim($_POST['nome'])));
         // Validar nome, email, subject e mensagem
         if (isset($_POST['submit'])) {
             $erro = array();
             if (
                 (!isset($_POST['nome'])) ||
                 (empty($_POST['nome'])) ||
-                (strlen($_POST['nome']) < 3)
+                (strlen($_POST['nome']) < 3) ||
+                (count($nomeSobrenome) <=1)
             ) {
                 $this->erro[] = 'Nome inválido';
             }
 
             if (
                 (!isset($_POST['email'])) ||
-                (empty($_POST['email']))
+                (empty($_POST['email'])) ||
+                ($this->valida_email($_POST['email']) == false)
             ) {
-                $this->erro[] = 'Informar e-mail';
-            }
-            if ($this->valida_email($_POST['email']) == false) {
                 $this->erro[] = 'Email inválido';
             }
 
@@ -89,7 +89,7 @@ class EnviarEmail extends PHPMailer
                 $this->erro[] = 'Informar mensagem';
             }
 
-            
+
             /* validar os outros */
 
             if (!isset($this->erro)) {
@@ -131,7 +131,7 @@ class EnviarEmail extends PHPMailer
         $this->mail->Subject = ($this->dadosEnvio['subject']);
 
         //Define o email em cópia
-        $this->mail->addCC('ybarbosa1608@gmail.com', 'Cópia ' . ($this->dadosEnvio['subject']));
+        $this->mail->addBCC('ybarbosa1608@gmail.com', 'Cópia ' . ($this->dadosEnvio['subject']));
 
 
         // Define o destinatário
@@ -141,7 +141,29 @@ class EnviarEmail extends PHPMailer
 
         // Seta o formato do e-mail para aceitar conteúdo HTML
         $this->mail->isHTML(true);
-        $conteudo = $this->dadosEnvio['message'];
+        $conteudo =  "
+        <style type='text/css'>
+        body {
+            margin: 0px;
+            font-family: Verdane;
+            font-size: 12px;
+            color: #6F30AB;
+        }
+        
+        </style>
+        <html>
+        <body style='padding: 50px; font-family: Arial, Helvetica, sans-serif;'>
+        <div style='border: 0.1px solid black; padding: 30px; text-align:center; background:#C18EE2;'>
+            <h1 style='font-size: 40px;'>Olá</h1>
+        </div>
+        <div style='border: 1px solid; text-align:start; padding: 13px; background-color: aliceblue;'>
+            <div style='padding: 30px 0 40px 10px; font-size: 23px;'>Olá, você recebeu um aviso de {$this->dadosEnvio['name']}</div>
+            <div style='text-align: center; font-size:30px;'>Mensagem</div>
+            <div style='color:black; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align: start; font-size:18px; padding: 10px 10px; border:2px solid #6F30AB; border-radius: 10px; '>{$this->dadosEnvio['message']}</div>
+        </div>
+        </body>
+        </html>
+        ";
         $this->mail->msgHTML($conteudo);
 
 

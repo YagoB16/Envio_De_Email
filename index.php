@@ -5,28 +5,65 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
-    <title>Document</title>
+    <link href="//db.onlinewebfonts.com/c/3ee28cd1f75331502eb4d62fa3e142c9?family=Exquisite+Corpse" rel="stylesheet" type="text/css" />
+    <link href="//db.onlinewebfonts.com/c/6b43dc31ba4fb1a3478a21e4118a54bc?family=Ravenscroft" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="shortcut icon" href="img/chapeu-de-bruxa.png">
+    <title>Formulário</title>
 </head>
 
-<body>
+<body class="container-body">
+    <header class="container-header">
+        <h1>Formulario Halloween</h1>
+    </header>
+    <main class="container-main">
+        <div class="div-bio">
+            <h2>Seja Bem-vindo</h2>
+            <p>Olá, me chamo Yago Barbosa, fiz esse projeto de formulário como forma de
+                estudo sobre
+                PHPMailer, uma biblioteca da linguagem PHP para envio de e-mails com segurança. </p>
+            <p>Halloween, ou Dia das Bruxas, é uma celebração popular de culto aos mortos
+                comemorada anualmente no
+                dia 31 de outubro. A cultura de celebração do Halloween é muito forte em países de língua
+                anglo-saxônica, sobretudo nos Estados Unidos. Com o tempo, o feriado ganhou popularidade e hoje é
+                comemorado, ainda que em menor escala, em boa parte do mundo.</p>
+        </div>
+        <div class="div-form">
+            <form action="" name="form_contato" method="post" autocomplete="off">
 
-    <form action="" method="POST">
-        <label for="nome">Nome</label>
-        <input type="text" name="nome" id="nome" autocomplete="off" placeholder="Nome"><br><br>
+                <div class="form__group field">
+                    <input type="input" class="form__field" name="nome" id="nome" autocomplete="off" placeholder="Nome" maxlength="15">
 
-        <label for="email">Email</label>
-        <input type="input" name="email" id="email" autocomplete="off" placeholder="email"><br><br>
+                    <label for="nome" class="form__label">Nome</label>
+                </div>
 
-        <label for="email">Assunto</label>
-        <input type="text" name="assunto" id="assunto" autocomplete="off" placeholder="assunto"><br><br>
+                <div class="form__group field">
+                    <input type="input" class="form__field" name="email" id="email" placeholder="Email">
+                    <label for="email" class="form__label">Email Destinatario</label>
+                </div>
 
-        <label for="email">Mensagem</label>
-        <input type="text" name="mensagem" id="mensagem" autocomplete="off" placeholder="mensagem"><br><br>
+                <div class="form__group field">
+                    <input type="text" class="form__field" name="assunto" id="assunto" placeholder="Assunto" maxlength="15">
+                    <label for="assunto" class="form__label">Assunto</label>
+                </div>
 
-        <input type="submit" value="Enviar" name="submit">
-    </form>
-
+                <div class="msg-box">
+                    <label for="mensagem" style="font-family: Exquisite Corpse;">Mensagem</label>
+                    <textarea name="mensagem" id="msg" cols="10" rows="5" placeholder="Sua mensagem"></textarea>
+                </div>
+                <div class="btn">
+                    <button type="submit" name="submit" class="custom-btn btn-11">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer class="container-footer">
+        <div class="fundo">
+            <div class="bruxa">
+                <img id="logo-footer" src="img/bruxa.png" alt="">
+            </div>
+        </div>
+    </footer>
     <?php
 
     use EnviarEmail\EnviarEmail;
@@ -42,17 +79,16 @@
     if (!isset($envio->erro)) {
         $envio->disparaEmail();
     }
-    
+
     ?>
 
-    <?php if(isset($envio->erro)):?>
+    <?php if (isset($envio->erro)) : ?>
         <ul>
-        <?php foreach($envio->erro as $erro):?>
-            <li><?= $erro; ?></li>
-        <?php endforeach; ?>
+            <?php foreach ($envio->erro as $erro) : ?>
+                <li><?= $erro; ?></li>
+            <?php endforeach; ?>
         </ul>
-    <?php endif;?>
-    
+    <?php endif; ?>
 </body>
 
 </html>
