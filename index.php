@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
+    
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="shortcut icon" href="image/chapeu-de-bruxa.png">
     <title>Formulário</title>
+    <script src="sweetalert2@11.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 </head>
 
 <body class="container-body">
@@ -56,31 +58,49 @@
                 </div>
             </form>
             <div>
-            <?php
+                <?php
 
-use EnviarEmail\EnviarEmail;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+                use EnviarEmail\EnviarEmail;
+                use PHPMailer\PHPMailer\PHPMailer;
+                use PHPMailer\PHPMailer\Exception;
 
-require './lib/vendor/autoload.php';
-require_once 'validacao.php';
+                require './lib/vendor/autoload.php';
+                require_once 'validacao.php';
 
 
-$envio = new EnviarEmail();
+                $envio = new EnviarEmail();
 
-if (!isset($envio->erro)) {
-    $envio->disparaEmail();
-}
+                if (!isset($envio->erro)) {
+                    $envio->disparaEmail();
+                    echo "<script type='text/javascript'>
+                     Swal.fire({
+                      icon: 'success',
+                      title: 'Enviado',
+                      text: 'Email enviado com sucesso',
+                      showConfirmButton: false,
+                      timer: 2500
+                      });
+                     </script>";
+                }else{
+                    echo "<script type='text/javascript'>
+                     Swal.fire({
+                      icon: 'error',
+                      title: 'Por favor, revise seus dados',
+                      showConfirmButton: false,
+                      timer: 2500
+                      });
+                     </script>";
+                }
 
-?>
-<?php if (isset($envio->erro)) : ?>
-    <h1>Houve erro nas informações</h1>
-    <ul>
-        <?php foreach ($envio->erro as $erro) : ?>
-            <li><?= $erro; ?></li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+                ?>
+                <?php if (isset($envio->erro)) : ?>
+                    <h1>Houve erro nas informações</h1>
+                    <ul>
+                        <?php foreach ($envio->erro as $erro) : ?>
+                            <li><?= $erro; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
             </div>
         </div>
     </main>
@@ -91,7 +111,7 @@ if (!isset($envio->erro)) {
             </div>
         </div>
     </footer>
-  
+
 </body>
 
 </html>

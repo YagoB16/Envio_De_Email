@@ -1,6 +1,7 @@
 <?php
 
 namespace EnviarEmail;
+
 error_reporting(0);
 
 use PHPMailer\PHPMailer\{PHPMailer, Exception};
@@ -57,6 +58,7 @@ class EnviarEmail extends PHPMailer
     {
 
         $nomeSobrenome =  (explode(" ", trim($_POST['nome'])));
+
         // Validar nome, email, subject e mensagem
         if (isset($_POST['submit'])) {
             $erro = array();
@@ -67,9 +69,9 @@ class EnviarEmail extends PHPMailer
             ) {
                 $this->erro[] = 'Nome inválido';
             }
-            if(
-                (count($nomeSobrenome) <=1)
-            ){
+            if (
+                (count($nomeSobrenome) <= 1)
+            ) {
                 $this->erro[] = 'Insira o sobrenome';
             }
 
@@ -132,15 +134,14 @@ class EnviarEmail extends PHPMailer
 
 
         //Define o assunto do email
-
         $this->mail->Subject = ($this->dadosEnvio['subject']);
+
 
         //Define o email em cópia
         $this->mail->addBCC('ybarbosa1608@gmail.com', 'Cópia ' . ($this->dadosEnvio['subject']));
 
 
         // Define o destinatário
-
         $this->mail->AddAddress($this->dadosEnvio['email'], $this->dadosEnvio['name']);
 
 
@@ -148,25 +149,30 @@ class EnviarEmail extends PHPMailer
         $this->mail->isHTML(true);
         $conteudo =  "
         <style type='text/css'>
-        body {
-            margin: 0px;
-            font-family: Verdane;
-            font-size: 12px;
-            color: #6F30AB;
-        }
-        
+            body {
+                min-width: 450px;
+                max-width: 550px;
+                margin: 0px;
+                font-family: Verdane;
+                font-size: 12px;
+                color: #0c020b;
+            }
         </style>
         <html>
-        <body style='padding: 50px; font-family: Arial, Helvetica, sans-serif;'>
-        <div style='border: 0.1px solid black; padding: 30px; text-align:center; background:#C18EE2;'>
-            <h1 style='font-size: 40px;'>Olá</h1>
-        </div>
-        <div style='border: 1px solid; text-align:start; padding: 13px; background-color: aliceblue;'>
-            <div style='padding: 30px 0 40px 10px; font-size: 23px;'>Olá, você recebeu um aviso de {$this->dadosEnvio['name']}</div>
-            <div style='text-align: center; font-size:30px;'>Mensagem</div>
-            <div style='color:black; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align: start; font-size:18px; padding: 10px 10px; border:2px solid #6F30AB; border-radius: 10px; '>{$this->dadosEnvio['message']}</div>
-        </div>
+
+        <body style='padding: 10px; font-family: Arial, Helvetica, sans-serif;'>
+            <div style='border: 0.1px solid black; padding: 30px; text-align:center; background:#750505;'>
+                <h1 style='font-size: 40px;'>Shaolin Contatos</h1>
+            </div>
+            <div style='border: 1px solid; text-align: center; padding: 15px 85px; background-color: rgb(240, 241, 241);'>
+                <div style='padding: 30px 0 40px 10px; font-size: 20px;'>Olá, você recebeu um aviso de <br>
+                    {$this->dadosEnvio['name']}</div>
+                <div
+                    style='width:350px; color:rgb(20, 15, 15); font-size:18px; padding: 20px 10px; border:2px solid #c7c6c9; background-color: #c7c6c9; border-radius: 10px; text-align: center; '>
+                    {$this->dadosEnvio['message']}</div>
+            </div>
         </body>
+
         </html>
         ";
         $this->mail->msgHTML($conteudo);
@@ -174,9 +180,9 @@ class EnviarEmail extends PHPMailer
 
         if (!$this->mail->send()) {
             echo 'Não foi possível enviar a mensagem.<br>';
-            
         } else {
-            echo 'Mensagem enviada.';
+        echo "";
+           
         }
     }
 }
