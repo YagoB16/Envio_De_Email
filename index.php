@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="//db.onlinewebfonts.com/c/3ee28cd1f75331502eb4d62fa3e142c9?family=Exquisite+Corpse" rel="stylesheet" type="text/css" />
     <link href="//db.onlinewebfonts.com/c/6b43dc31ba4fb1a3478a21e4118a54bc?family=Ravenscroft" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="./css/layout.css">
-    <link rel="shortcut icon" href="img/chapeu-de-bruxa.png">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="image/chapeu-de-bruxa.png">
     <title>Formulário</title>
 </head>
 
@@ -55,40 +55,43 @@
                     <button type="submit" name="submit" class="custom-btn btn-11">Enviar</button>
                 </div>
             </form>
+            <div>
+            <?php
+
+use EnviarEmail\EnviarEmail;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require './lib/vendor/autoload.php';
+require_once 'validacao.php';
+
+
+$envio = new EnviarEmail();
+
+if (!isset($envio->erro)) {
+    $envio->disparaEmail();
+}
+
+?>
+<?php if (isset($envio->erro)) : ?>
+    <h1>Houve erro nas informações</h1>
+    <ul>
+        <?php foreach ($envio->erro as $erro) : ?>
+            <li><?= $erro; ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+            </div>
         </div>
     </main>
     <footer class="container-footer">
         <div class="fundo">
             <div class="bruxa">
-                <img id="logo-footer" src="img/bruxa.png" alt="">
+                <img id="logo-footer" src="image/bruxa.png" alt="">
             </div>
         </div>
     </footer>
-    <?php
-
-    use EnviarEmail\EnviarEmail;
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
-
-    require './lib/vendor/autoload.php';
-    require_once 'validacao.php';
-
-
-    $envio = new EnviarEmail();
-
-    if (!isset($envio->erro)) {
-        $envio->disparaEmail();
-    }
-
-    ?>
- <?php if (isset($envio->erro)) : ?>
-        <h1>Houve erro nas informações</h1>
-        <ul>
-            <?php foreach ($envio->erro as $erro) : ?>
-                <li><?= $erro; ?></li>
-            <?php endforeach; ?>
-        </ul>
-    <?php endif; ?>
+  
 </body>
 
 </html>

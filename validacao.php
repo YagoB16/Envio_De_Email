@@ -1,6 +1,7 @@
 <?php
 
 namespace EnviarEmail;
+error_reporting(0);
 
 use PHPMailer\PHPMailer\{PHPMailer, Exception};
 
@@ -62,7 +63,7 @@ class EnviarEmail extends PHPMailer
             if (
                 (!isset($_POST['nome'])) ||
                 (empty($_POST['nome'])) ||
-                (strlen($_POST['nome']) < 3) ||
+                (strlen($_POST['nome']) < 3)
             ) {
                 $this->erro[] = 'Nome inválido';
             }
@@ -173,7 +174,7 @@ class EnviarEmail extends PHPMailer
 
         if (!$this->mail->send()) {
             echo 'Não foi possível enviar a mensagem.<br>';
-            echo 'Erro: ' . $this->mail->ErrorInfo;
+            
         } else {
             echo 'Mensagem enviada.';
         }
