@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="form__group field">
-                    <input type="text" class="form__field" name="assunto" id="assunto" placeholder="Assunto" maxlength="15">
+                    <input type="text" class="form__field" name="assunto" id="assunto" placeholder="Assunto" maxlength="35">
                     <label for="assunto" class="form__label">Assunto</label>
                 </div>
 
@@ -73,23 +73,23 @@
                 if (!isset($envio->erro)) {
                     $envio->disparaEmail();
                     echo "<script type='text/javascript'>
-                     Swal.fire({
-                      icon: 'success',
-                      title: 'Enviado',
-                      text: 'Email enviado com sucesso',
-                      showConfirmButton: false,
-                      timer: 2500
-                      });
-                     </script>";
-                }else{
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'Enviado',
+                    text: 'Email enviado com sucesso',
+                    showConfirmButton: false,
+                    timer: 2500
+                    });
+                    </script>";
+                } else {
                     echo "<script type='text/javascript'>
-                     Swal.fire({
-                      icon: 'error',
-                      title: 'Por favor, revise seus dados',
-                      showConfirmButton: false,
-                      timer: 2500
-                      });
-                     </script>";
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'Por favor, revise seus dados',
+                    showConfirmButton: false,
+                    timer: 2500
+                    });
+                    </script>";
                 }
 
                 ?>
