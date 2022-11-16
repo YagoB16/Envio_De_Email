@@ -109,7 +109,7 @@ class EnviarEmail extends PHPMailer
                 (!isset($_POST['mensagem'])) ||
                 (empty($_POST['mensagem']))
             ) {
-                $this->erro[] = 'Informar mensagem';
+                $this->erro[] = 'Informe a mensagem';
             }
 
 
