@@ -1,304 +1,216 @@
-@import url(//db.onlinewebfonts.com/c/3ee28cd1f75331502eb4d62fa3e142c9?family=Exquisite+Corpse);
-@import url(//db.onlinewebfonts.com/c/6b43dc31ba4fb1a3478a21e4118a54bc?family=Ravenscroft);
+<?php
 
-@font-face {
-  font-family: "Exquisite Corpse";
-  src: url("//db.onlinewebfonts.com/t/3ee28cd1f75331502eb4d62fa3e142c9.eot");
-  src: url("//db.onlinewebfonts.com/t/3ee28cd1f75331502eb4d62fa3e142c9.eot?#iefix")
-      format("embedded-opentype"),
-    url("//db.onlinewebfonts.com/t/3ee28cd1f75331502eb4d62fa3e142c9.woff2")
-      format("woff2"),
-    url("//db.onlinewebfonts.com/t/3ee28cd1f75331502eb4d62fa3e142c9.woff")
-      format("woff"),
-    url("//db.onlinewebfonts.com/t/3ee28cd1f75331502eb4d62fa3e142c9.ttf")
-      format("truetype"),
-    url("//db.onlinewebfonts.com/t/3ee28cd1f75331502eb4d62fa3e142c9.svg#Exquisite Corpse")
-      format("svg");
-}
+namespace EnviarEmail;
 
-@font-face {
-  font-family: "Ravenscroft";
-  src: url("//db.onlinewebfonts.com/t/6b43dc31ba4fb1a3478a21e4118a54bc.eot");
-  src: url("//db.onlinewebfonts.com/t/6b43dc31ba4fb1a3478a21e4118a54bc.eot?#iefix")
-      format("embedded-opentype"),
-    url("//db.onlinewebfonts.com/t/6b43dc31ba4fb1a3478a21e4118a54bc.woff2")
-      format("woff2"),
-    url("//db.onlinewebfonts.com/t/6b43dc31ba4fb1a3478a21e4118a54bc.woff")
-      format("woff"),
-    url("//db.onlinewebfonts.com/t/6b43dc31ba4fb1a3478a21e4118a54bc.ttf")
-      format("truetype"),
-    url("//db.onlinewebfonts.com/t/6b43dc31ba4fb1a3478a21e4118a54bc.svg#Ravenscroft")
-      format("svg");
-}
+error_reporting(0);
 
-::-webkit-scrollbar{
-  width: 15px;
-}
-::-webkit-scrollbar-track{
-  background-color: rgba(62,6,95,1);
-}
-::-webkit-scrollbar-button{
-  background-color: rgb(66, 12, 97);
-}
-::-webkit-scrollbar-thumb{
-  background-color:rgb(66, 12, 97);
-}
-::-webkit-scrollbar-thumb:hover{
-  background-color: #8e05c2;
-}
+use PHPMailer\PHPMailer\{PHPMailer, Exception};
 
-* {
-  box-sizing: border-box;
-}
+require_once './lib/vendor/autoload.php';
 
-html {
-  min-height: 100%;
-  background: rgb(142,5,194);
-  background: linear-gradient(47deg, rgba(142,5,194,1) 0%, rgba(117,5,80,1) 64%, rgba(62,6,95,1) 99%);
-}
+define('MAIL_HOST', 'smtp.gmail.com');
+define('MAIL_PORT',   587);
+define('MAIL_USER',  'goyagoba@gmail.com');
+define('MAIL_PASS', 'alqezukuhvoahupl');
 
-.container-header {
-  padding: 30px;
-  text-align: left;
-}
-.container-header h1 {
-  font-family: "Exquisite Corpse";
-  font-size: 65px;
-}
+class EnviarEmail extends PHPMailer
+{
 
-.container-main {
-  display: flex;
-  align-items: flex-start;
-}
+    public function __construct()
+    {
 
-.div-bio {
-  width: 50%;
-  padding-right: 20px;
-}
+        $this->mail = new PHPMailer(true);
+        $this->model();
+    }
 
-.div-bio h2 {
-  font-size: 60px;
-  font-family: Ravenscroft;
-}
-.div-bio p {
-  font-size: 35px;
-  font-family: Ravenscroft;
-}
+    public function disparaEmail()
+    {
+        $this->envioSmtp();
+    }
 
-.div-form {
-  width: 40%;
-  max-width: 500px;
-  padding: 1em;
-  border: 0.1px solid rgba(163, 7, 202, 0.863);
-  border-radius: 1em;
-  background: transparent;
-}
+    protected function parserString($array, $string)
+    {
 
-.div-erro{
-  width: 30%;
-  align-items: center;
-  padding: 10px 40px 0 90px;
-  
-}
-.div-erro h1{
-  font-size: 30px;
-}
+        foreach ($array as $key => $value) {
+            $string = str_replace('[' . $key . ']', $value, $string);
+        }
+        return $string;
+    }
+
+    protected function valida_email($email)
+    {
+        if (function_exists('filter_var')) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL) == FALSE) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            if (preg_match('/^(?:[\w\!\#\$\%\&\'\\+\-\/\=\?\^\`\{\|\}\~]+\.)[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/', $email) == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    private function model()
+    {
+
+        $nomeSobrenome =  (explode(" ", trim($_POST['nome'])));
+
+        // Validar nome, email, subject e mensagem
+        if (isset($_POST['submit'])) {
+            $erro = array();
+
+            //Validar nome
+            if (
+                (!isset($_POST['nome'])) ||
+                (empty($_POST['nome'])) ||
+                (strlen($nomeSobrenome[0]) < 3)
+            ) {
+                $this->erro[] = 'Nome inválido';
+            }
+
+            //Validar sobrenome
+            if (
+                (count($nomeSobrenome) <= 1) 
+            ) {
+                $this->erro[] = 'Insira o sobrenome';
+            }
+            if (
+                (strlen($nomeSobrenome[1]) < 3)
+            ) {
+                $this->erro[] = 'Sobrenome inválido';
+            }
 
 
+            //Validar email    
+            if (
+                (!isset($_POST['email'])) ||
+                (empty($_POST['email'])) ||
+                ($this->valida_email($_POST['email']) == false)
+            ) {
+                $this->erro[] = 'Email inválido';
+            }
 
-.form__group {
-  position: relative;
-  padding: 15px 0 0;
-  margin-top: 10px;
-  width: 50%;
-  font-family: "Exquisite Corpse";
-}
 
-.form__field {
-  font-family: "inherit";
-  width: 200%;
-  border: 0;
-  border-bottom: 2px solid rgb(32, 2, 31);
-  outline: 0;
-  font-size: 1.3rem;
-  color: rgb(249, 245, 245);
-  padding: 7px 0 0 0;
-  background: transparent;
-  transition: border-color 0.2s;
-}
+            //Validar subject
+            if (
+                (!isset($_POST['assunto'])) ||
+                (empty($_POST['assunto']))
+            ) {
+                $this->erro[] = 'Informe o assunto';
+            }
 
-::placeholder {
-  color: transparent;
-}
 
-:placeholder-shown ~ .form__label {
-  font-size: 1.3rem;
-  cursor: text;
-  top: 20px;
-}
+            //Validar mensagem
+            if (
+                (!isset($_POST['mensagem'])) ||
+                (empty($_POST['mensagem']))
+            ) {
+                $this->erro[] = 'Informar mensagem';
+            }
 
-.form__label {
-  position: absolute;
-  top: 0;
-  display: block;
-  transition: 0.2s;
-  font-size: 1rem;
-  color: rgb(177, 161, 176);
-}
 
-.form__field:focus {
-  padding-bottom: 3px;
-  font-weight: 700;
-  border-width: 3px;
-  border-image: linear-gradient(to right, rgb(103, 70, 98), rgb(12, 1, 10));
-  border-image-slice: 1;
-}
+            /* validar os outros */
 
-.form__field:focus ~ .form__label {
-  position: absolute;
-  top: 0;
-  display: block;
-  transition: 0.2s;
-  font-size: 1.4rem;
-  color: rgb(50, 17, 75);
-  font-weight: 700;
-}
+            if (!isset($this->erro)) {
+                $this->dadosEnvio = array();
+                $this->dadosEnvio['name'] = $_POST['nome'];
+                $this->dadosEnvio['email'] = $_POST['email'];
+                $this->dadosEnvio['subject'] = $_POST['assunto'];
+                $this->dadosEnvio['message'] = $_POST['mensagem'];
 
-input:internal-autofill-selected {
-  appearance: none;
-  background-image: none !important;
-  background-color: -internal-light-dark(
-    rgb(83, 7, 170),
-    rgba(233, 7, 41, 0.4)
-  ) !important;
-  color: fieldtext !important;
-}
 
-/* reset input */
-.form__field:invalid,
-.form__field:required {
-  box-shadow: none;
-}
+                $this->dadosEnvio['name'] = $this->parserString($this->dadosEnvio['name'], $_POST['nome']);
+                $this->dadosEnvio['email'] = $this->parserString($this->dadosEnvio['email'], $_POST['email']);
+                $this->dadosEnvio['subject'] = $this->parserString($this->dadosEnvio['subject'], $_POST['assunto']);
+                $this->dadosEnvio['message'] = $this->parserString($this->dadosEnvio['message'], $_POST['mensagem']);
+            }
+        };
+    }
+    protected function envioSmtp()
+    {
+        $this->mail->CharSet = 'UTF-8';
+        $this->mail->isSMTP(true);
+        $this->mail->SMTPAuth = true;
+        $this->mail->SMTPSecure = 'tls'; // Criptografia do envio SSL também é aceito
+        $this->mail->Username = MAIL_USER; // Autenticação do Email
+        $this->mail->Password = MAIL_PASS;
+        $this->mail->Port = MAIL_PORT;
+        $this->mail->Host = MAIL_HOST;
 
-.msg-box {
-  padding-top: 5%;
-  font-size: 25px;
-  
-}
+        //Define o Remetente
+        $this->mail->setFrom('goyagoba@gmail.com', 'PHPMilho');
 
-#msg {
-  border: 1px solid rgb(58, 14, 91);
-  border-radius: 5px;
-  width: 100%;
-  height: 10rem;
-  background: transparent;
-  
-}
 
-textarea:valid {
-  border: 2px solid lime;
-}
+        //Define email para resposta
+        $this->mail->addReplyTo('goyagoba@gmail.com');
 
-button {
-  align-items: center;
-  margin: 20px;
-}
-.btn {
-  padding: 3% 45% 0 29%;
-}
-.custom-btn {
-  width: 130px;
-  height: 40px;
-  color: #fff;
-  border-radius: 5px;
-  padding: 10px 25px;
-  font-family: "Lato", sans-serif;
-  font-weight: 500;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  display: inline-block;
-  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
-    7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1);
-  outline: none;
-}
-.btn-11 {
-  border: none;
-  background: rgba(145, 6, 135);
-  background: linear-gradient(0deg, rgb(135, 14, 156) 0%, rgb(41, 6, 44) 100%);
-  color: #fff;
-  overflow: hidden;
-}
-.btn-11:hover {
-  text-decoration: none;
-  color: #fff;
-}
-.btn-11:before {
-  position: absolute;
-  content: "";
-  display: inline-block;
-  top: -180px;
-  left: 0;
-  width: 30px;
-  height: 100%;
-  background-color: #fff;
-  animation: shiny-btn1 3s ease-in-out infinite;
-}
-.btn-11:hover {
-  opacity: 0.7;
-}
-.btn-11:active {
-  box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, 0.3),
-    -4px -4px 6px 0 rgba(116, 125, 136, 0.2),
-    inset -4px -4px 6px 0 rgba(255, 255, 255, 0.2),
-    inset 4px 4px 6px 0 rgba(0, 0, 0, 0.2);
-}
 
-@-webkit-keyframes shiny-btn1 {
-  0% {
-    -webkit-transform: scale(0) rotate(45deg);
-    opacity: 0;
-  }
-  80% {
-    -webkit-transform: scale(0) rotate(45deg);
-    opacity: 0.5;
-  }
-  81% {
-    -webkit-transform: scale(4) rotate(45deg);
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: scale(50) rotate(45deg);
-    opacity: 0;
-  }
-}
+        //Define o assunto do email
+        $this->mail->Subject = '🚨'.($this->dadosEnvio['subject']);
 
-.container-footer {
-  display: flex;
-}
-#logo-footer {
-  width: 40px;
-}
 
-.fundo {
-  position: relative;
-  width: 100%;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-}
+        //Define o email em cópia
+        $this->mail->addBCC('ybarbosa1608@gmail.com', 'Cópia de ' . ($this->dadosEnvio['subject']));
 
-.fundo .bruxa {
-  position: relative;
-  animation: animate 5.5s ease-in-out infinite;
-}
 
-@keyframes animate {
-  0% {
-    transform: translateX(-1px);
-  }
-  50% {
-    transform: translateX(900px);
-  }
+        // Define o destinatário
+        $this->mail->AddAddress($this->dadosEnvio['email']);
+
+
+        // Seta o formato do e-mail para aceitar conteúdo HTML
+        $this->mail->isHTML(true);
+        $conteudo =  "
+        <div style='Margin:0px auto;max-width:600px;'>
+        <table align='center' border='0' cellpadding='0' cellspacing='0' role='presentation' style='width:100%;'>
+            <tbody>
+                <tr>
+                    <td style='direction:ltr;font-size:0px;padding:20px 0;text-align:center;vertical-align:top;'>
+                        <div class='mj-column-per-100 outlook-group-fix' style='font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;'>
+                            <table border='0' cellpadding='0' cellspacing='0' role='presentation' style='vertical-align:top;' width='100%'>
+                                <tr>
+                                    <td align='center' style='font-size:0px;padding:10px 25px;word-break:break-word;'>
+                                        <table border='0' cellpadding='0' cellspacing='0' role='presentation' style='border-collapse:collapse;border-spacing:0px;'>
+                                            <tbody>
+                                                <tr>
+                                                    <td style='width:550px; height: 150px; background-color: #691717;text-align: center;font-family:Helvetica, arial, sans-serif;font-size:35px;line-height:1.1;text-align:center;color:#0b0404;'>
+                                                        Contato
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align='center' style='font-size:0px;padding:10px 25px;word-break:break-word;'>
+                                        <div style='font-family:Helvetica, arial, sans-serif;font-size:30px;line-height:1.1;text-align:center;color:#444444;'>
+                                            Olá, {$this->dadosEnvio['name']} você recebeu um aviso
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align='justify' style='font-size:0px;padding:10px 25px;word-break:break-word;'>
+                                        <div style='font-family:Helvetica, arial, sans-serif;font-size:16px;line-height:24px;text-align:justify;color:#444444;'>{$this->dadosEnvio['message']}</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+        ";
+        $this->mail->msgHTML($conteudo);
+
+
+        if (!$this->mail->send()) {
+            echo 'Não foi possível enviar a mensagem.<br>';
+        } else {
+            echo "";
+        }
+    }
 }

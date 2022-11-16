@@ -31,19 +31,30 @@
       format("svg");
 }
 
+::-webkit-scrollbar{
+  width: 15px;
+}
+::-webkit-scrollbar-track{
+  background-color: rgba(62,6,95,1);
+}
+::-webkit-scrollbar-button{
+  background-color: rgb(66, 12, 97);
+}
+::-webkit-scrollbar-thumb{
+  background-color:rgb(66, 12, 97);
+}
+::-webkit-scrollbar-thumb:hover{
+  background-color: #8e05c2;
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
   min-height: 100%;
-  background: rgb(23, 13, 1);
-  background: linear-gradient(
-    229deg,
-    rgba(23, 13, 1, 1) 10%,
-    rgba(198, 65, 4, 1) 38%,
-    rgba(219, 86, 8, 1) 100%
-  );
+  background: rgb(142,5,194);
+  background: linear-gradient(47deg, rgba(142,5,194,1) 0%, rgba(117,5,80,1) 64%, rgba(62,6,95,1) 99%);
 }
 
 .container-header {
@@ -62,6 +73,7 @@ html {
 
 .div-bio {
   width: 50%;
+  padding-right: 20px;
 }
 
 .div-bio h2 {
@@ -77,7 +89,7 @@ html {
   width: 40%;
   max-width: 500px;
   padding: 1em;
-  border: 0.1px solid rgba(90, 3, 112, 0.863);
+  border: 0.1px solid rgba(163, 7, 202, 0.863);
   border-radius: 1em;
   background: transparent;
 }
@@ -91,10 +103,6 @@ html {
 .div-erro h1{
   font-size: 30px;
 }
-
-
-
-
 
 
 
@@ -135,14 +143,14 @@ html {
   display: block;
   transition: 0.2s;
   font-size: 1rem;
-  color: rgb(145, 6, 135);
+  color: rgb(177, 161, 176);
 }
 
 .form__field:focus {
   padding-bottom: 3px;
   font-weight: 700;
   border-width: 3px;
-  border-image: linear-gradient(to right, rgb(103, 70, 98), rgb(144, 8, 123));
+  border-image: linear-gradient(to right, rgb(103, 70, 98), rgb(12, 1, 10));
   border-image-slice: 1;
 }
 
@@ -151,8 +159,8 @@ html {
   top: 0;
   display: block;
   transition: 0.2s;
-  font-size: 1.3rem;
-  color: rgb(58, 14, 91);
+  font-size: 1.4rem;
+  color: rgb(50, 17, 75);
   font-weight: 700;
 }
 
@@ -160,7 +168,7 @@ input:internal-autofill-selected {
   appearance: none;
   background-image: none !important;
   background-color: -internal-light-dark(
-    rgb(12, 70, 170),
+    rgb(83, 7, 170),
     rgba(233, 7, 41, 0.4)
   ) !important;
   color: fieldtext !important;
@@ -175,6 +183,7 @@ input:internal-autofill-selected {
 .msg-box {
   padding-top: 5%;
   font-size: 25px;
+  
 }
 
 #msg {
@@ -183,6 +192,7 @@ input:internal-autofill-selected {
   width: 100%;
   height: 10rem;
   background: transparent;
+  
 }
 
 textarea:valid {
