@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="shortcut icon" href="image/chapeu-de-bruxa.png">
     <title>Formulário</title>
-    <script src="sweetalert2@11.js"></script>
+    <script src="./js/sweetalert2.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 </head>
 
