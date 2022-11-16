@@ -38,10 +38,10 @@
   background-color: rgba(62,6,95,1);
 }
 ::-webkit-scrollbar-button{
-  background-color: rgb(66, 12, 97);
+  background-color: rgb(249, 247, 249);
 }
 ::-webkit-scrollbar-thumb{
-  background-color:rgb(66, 12, 97);
+  background-color:rgb(198, 194, 201);
 }
 ::-webkit-scrollbar-thumb:hover{
   background-color: #8e05c2;
