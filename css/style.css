@@ -35,16 +35,16 @@
   width: 15px;
 }
 ::-webkit-scrollbar-track{
-  background-color: rgba(62,6,95,1);
+  background-color: rgb(177, 161, 176);
 }
 ::-webkit-scrollbar-button{
   background-color: rgb(249, 247, 249);
 }
 ::-webkit-scrollbar-thumb{
-  background-color:rgb(198, 194, 201);
+  background-color:rgb(50, 17, 75);
 }
 ::-webkit-scrollbar-thumb:hover{
-  background-color: #8e05c2;
+  background-color: rgb(103, 70, 98);
 }
 
 * {
