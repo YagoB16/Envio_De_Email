@@ -34,7 +34,7 @@
             <form action="" name="form_contato" method="post" autocomplete="off">
 
                 <div class="form__group field">
-                    <input type="input" class="form__field" name="nome" id="nome" autocomplete="off" placeholder="Nome" maxlength="15">
+                    <input type="input" class="form__field" name="nome" id="nome" autocomplete="off" placeholder="Nome" maxlength="65">
 
                     <label for="nome" class="form__label">Nome</label>
                 </div>
