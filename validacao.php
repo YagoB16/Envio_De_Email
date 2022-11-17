@@ -68,21 +68,19 @@ class EnviarEmail extends PHPMailer
                 (!isset($_POST['nome'])) ||
                 (empty($_POST['nome'])) ||
                 (strlen($nomeSobrenome[0]) < 3)||
-                (strlen($_POST['nome']) > 20)
+                (strlen($_POST['nome']) > 25) || 
+                (!preg_match("/^[a-zA-Z-' ]*$/",$nomeSobrenome[0]))
             ) {
                 $this->erro[] = 'Nome inválido';
             }
 
             //Validar sobrenome
             if (
-                (count($nomeSobrenome) <= 1) 
+                (count($nomeSobrenome) <= 1)||
+                (strlen($nomeSobrenome[1]) < 3)||
+                (!preg_match("/^[a-zA-Z-' ]*$/",$nomeSobrenome[1]))
             ) {
                 $this->erro[] = 'Insira o sobrenome';
-            }
-            if (
-                (strlen($nomeSobrenome[1]) < 3)
-            ) {
-                $this->erro[] = 'Sobrenome inválido';
             }
 
 
