@@ -69,7 +69,7 @@ class EnviarEmail extends PHPMailer
                 (empty($_POST['nome'])) ||
                 (strlen($nomeSobrenome[0]) < 3)||
                 (strlen($_POST['nome']) > 25) || 
-                (!preg_match("/^[a-zA-Z-' ]*$/",$nomeSobrenome[0]))
+                (!preg_match("/^[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑA-Z-' ]*$/",$nomeSobrenome[0]))
             ) {
                 $this->erro[] = 'Nome inválido';
             }
@@ -78,7 +78,7 @@ class EnviarEmail extends PHPMailer
             if (
                 (count($nomeSobrenome) <= 1)||
                 (strlen($nomeSobrenome[1]) < 3)||
-                (!preg_match("/^[a-zA-Z-' ]*$/",$nomeSobrenome[1]))
+                (!preg_match("/^[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑA-Z-' ]*$/",$nomeSobrenome[1]))
             ) {
                 $this->erro[] = 'Insira o sobrenome';
             }
