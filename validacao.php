@@ -10,8 +10,8 @@ require_once './lib/vendor/autoload.php';
 
 define('MAIL_HOST', 'smtp.gmail.com');
 define('MAIL_PORT',   587);
-define('MAIL_USER',  '');
-define('MAIL_PASS', '');
+define('MAIL_USER',  'SeuEmail@Aqui.com');
+define('MAIL_PASS', 'Su4S3nh4');
 
 class EnviarEmail extends PHPMailer
 {
@@ -63,16 +63,16 @@ class EnviarEmail extends PHPMailer
         if (isset($_POST['submit'])) {
             $erro = array();
 
-            //Validar nome
-            if (
-                (!isset($_POST['nome'])) ||
-                (empty($_POST['nome'])) ||
-                (strlen($nomeSobrenome[0]) < 3)||
-                (strlen($_POST['nome']) > 30) || 
-                (!preg_match("/^[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑA-Z-' ]*$/",$nomeSobrenome[0]))
-            ) {
-                $this->erro[] = 'Nome inválido';
-            }
+           //Validar nome
+        if (
+            (!isset($_POST['nome'])) ||
+            (empty($_POST['nome'])) ||
+            (strlen($nomeSobrenome[0]) < 3)||
+            (strlen(trim($_POST['nome'])) > 55) || 
+            (!preg_match("/^[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑA-Z-' ]*$/",$nomeSobrenome[0]))
+        ) {
+            $this->erro[] = 'Insira um nome válido';
+        }
 
             //Validar sobrenome
             if (
@@ -80,7 +80,16 @@ class EnviarEmail extends PHPMailer
                 (strlen($nomeSobrenome[1]) < 3)||
                 (!preg_match("/^[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑA-Z-' ]*$/",$nomeSobrenome[1]))
             ) {
-                $this->erro[] = 'Sobrenome inválido';
+                $this->erro[] = 'Insira um sobrenome válido';
+            }
+
+
+            //Validar caracteres após sobrenome
+            if(
+                (count($nomeSobrenome)>5)||
+                (!preg_match("/^[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑA-Z-' ]*$/", $_POST['nome']))
+            ){
+                $this->erro[]= 'Caracteres digitados inválidos';
             }
 
 
