@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="shortcut icon" href="image/chapeu-de-bruxa.png">
     <title>Formulário</title>
-    <script src="./js/sweetalert2.js"></script>
+    <script src="./js/sweetalert2@11.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 </head>
 
@@ -34,9 +34,9 @@
             <form action="" name="form_contato" method="post" autocomplete="off">
 
                 <div class="form__group field">
-                    <input type="input" class="form__field" name="nome" id="nome" autocomplete="off" placeholder="Nome" maxlength="65">
+                    <input type="input" class="form__field" name="nome" id="nome" autocomplete="off" placeholder="Nome" maxlength="55">
 
-                    <label for="nome" class="form__label">Nome</label>
+                    <label for="nome" class="form__label">Nome e sobrenome</label>
                 </div>
 
                 <div class="form__group field">
@@ -57,42 +57,28 @@
                     <button type="submit" name="submit" class="custom-btn btn-11">Enviar</button>
                 </div>
             </form>
+            <?php
+
+            use verificaDados\ValidaDados\validaDados as ValidaDadosValidaDados;
+
+            require './lib/vendor/autoload.php';
+            require_once 'verificaDados.php';
+
+            $envio = new ValidaDadosValidaDados();
+
+            if (isset($envio->erro)) {
+
+                echo "<script type='text/javascript'>
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Por favor, revise seus dados',
+                        showConfirmButton: false,
+                        timer: 2500
+                        });
+                        </script>";
+            }
+            ?>
             <div>
-                <?php
-
-                use EnviarEmail\EnviarEmail;
-                use PHPMailer\PHPMailer\PHPMailer;
-                use PHPMailer\PHPMailer\Exception;
-
-                require './lib/vendor/autoload.php';
-                require_once 'validacao.php';
-
-
-                $envio = new EnviarEmail();
-
-                if (!isset($envio->erro)) {
-                    $envio->disparaEmail();
-                    echo "<script type='text/javascript'>
-                    Swal.fire({
-                    icon: 'success',
-                    title: 'Enviado',
-                    text: 'Email enviado com sucesso',
-                    showConfirmButton: false,
-                    timer: 2500
-                    });
-                    </script>";
-                } else {
-                    echo "<script type='text/javascript'>
-                    Swal.fire({
-                    icon: 'error',
-                    title: 'Por favor, revise seus dados',
-                    showConfirmButton: false,
-                    timer: 2500
-                    });
-                    </script>";
-                }
-
-                ?>
                 <?php if (isset($envio->erro)) : ?>
                     <h1>Houve erro nas informações</h1>
                     <ul>
@@ -102,6 +88,30 @@
                     </ul>
                 <?php endif; ?>
             </div>
+            <?php
+
+            use EnviarEmail\EnviarEmail;
+            use PHPMailer\PHPMailer\{PHPMailer, Exception};
+
+
+            require './lib/vendor/autoload.php';
+            require_once 'enviarEmail.php';
+
+            if (!isset($envio->erro)) {
+
+                $enviar = new EnviarEmail();
+                echo "<script type='text/javascript'>
+                Swal.fire({
+                icon: 'success',
+                title: 'Enviado',
+                text: 'Email enviado com sucesso',
+                showConfirmButton: false,
+                timer: 2500
+                });
+                </script>";
+            }
+
+            ?>
         </div>
     </main>
     <footer class="container-footer">
