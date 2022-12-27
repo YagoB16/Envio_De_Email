@@ -23,13 +23,26 @@ class EnviarEmail extends PHPMailer
         $this->envioSmtp();
     }
 
-
+    protected function parserString($array)
+    {
+        $string = '';
+        foreach ($array as $key => $value) {
+            $string .= str_replace('[' . $key . ']', $value, $string);
+        }
+        return $string;
+    }
 
     protected function envioSmtp()
     {
+        //Caso não tenha erro irá executar 
         if (!isset($this->erro)) {
 
-            $this->dadosEnvio['name'] = $_POST['nome'];
+            $nomeSobrenome = $_POST['nome'];
+
+            $this->dadosEnvio['nomeSobrenome'] = $_POST['nome'];
+
+            //$this->dadosEnvio['name'] = $nomeSobrenome[1]; Ajustar para trazer apenas o nome
+
             $this->dadosEnvio['email'] = $_POST['email'];
             $this->dadosEnvio['subject'] = $_POST['assunto'];
             $this->dadosEnvio['message'] = $_POST['mensagem'];
@@ -71,13 +84,25 @@ class EnviarEmail extends PHPMailer
 
 
         //Incluir arquivo com html para email
-        ob_start();
-        include("./teste.html");
-        $conteudo = ob_get_clean();
 
+        $array = array(
+            "nome" => $this->dadosEnvio['name'],
+            "nomeSobrenome" => $this->dadosEnvio['nomeSobrenome'],
+            "mensagem" => $this->dadosEnvio['message']
+        );
 
+        $email = fopen('./template.html', 'r+');
+        $conteudo = fread($email, filesize('./template.html'));
+        $nome = str_replace('[nome]', $array["nome"], $conteudo);
+        $nomeSobre = str_replace('[nome_sobrenome]', $array["nomeSobrenome"], $nome);
+        $mensagem = str_replace('[mensagem]', $array["mensagem"], $nomeSobre);
 
-        $this->mail->msgHTML($conteudo);
+        $this->mail->msgHTML($mensagem);
+
+        fclose($email);
+
+        //Necessário ajustar para orientação a objeto, utilizar uma função já criada acima 'parserString()'
+
 
 
         if (!$this->mail->send()) {
