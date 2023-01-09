@@ -12,7 +12,7 @@ require_once 'verificaDados.php';
 
 define('MAIL_HOST', 'smtp.gmail.com');
 define('MAIL_PORT',   587);
-define('MAIL_USER',  'goyagoba@gmail.com');
+define('MAIL_USER',  '');
 define('MAIL_PASS', '');
 
 
