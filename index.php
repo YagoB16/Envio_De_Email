@@ -62,11 +62,13 @@
             use verificaDados\ValidaDados\validaDados as ValidaDadosValidaDados;
 
             require './lib/vendor/autoload.php';
-            require_once 'verificaDados.php';
+            include_once 'verificaDados.php';
+
 
             $envio = new ValidaDadosValidaDados();
 
             if (isset($envio->erro)) {
+
 
                 echo "<script type='text/javascript'>
                         Swal.fire({
@@ -99,18 +101,17 @@
 
             if (!isset($envio->erro)) {
 
-                $enviar = new EnviarEmail();
+                $envio = new EnviarEmail();
                 echo "<script type='text/javascript'>
-                Swal.fire({
-                icon: 'success',
-                title: 'Enviado',
-                text: 'Email enviado com sucesso',
-                showConfirmButton: false,
-                timer: 2500
-                });
-                </script>";
-            }
-
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Enviado',
+                        text: 'Email enviado com sucesso',
+                        showConfirmButton: false,
+                        timer: 2500
+                        });
+                        </script>";
+            } 
             ?>
         </div>
     </main>

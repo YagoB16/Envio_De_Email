@@ -36,7 +36,7 @@ class EnviarEmail extends PHPMailer
     {
         //Caso não tenha erro irá executar 
         if (!isset($this->erro)) {
-
+            $erro = array();
             $nomeSobrenome = $_POST['nome'];
 
             $this->dadosEnvio['nomeSobrenome'] = $_POST['nome'];
@@ -85,20 +85,21 @@ class EnviarEmail extends PHPMailer
 
         //Incluir arquivo com html para email
 
-        $array = array(
-            "nome" => $this->dadosEnvio['name'],
-            "nomeSobrenome" => $this->dadosEnvio['nomeSobrenome'],
-            "mensagem" => $this->dadosEnvio['message']
+        $arra = array(
+            '[nome]' => $this->dadosEnvio['name'],
+            '[nome_sobrenome]' => $this->dadosEnvio['nomeSobrenome'],
+            '[mensagem]' => $this->dadosEnvio['message']
         );
 
         $email = fopen('./template.html', 'r+');
         $conteudo = fread($email, filesize('./template.html'));
-        $nome = str_replace('[nome]', $array["nome"], $conteudo);
-        $nomeSobre = str_replace('[nome_sobrenome]', $array["nomeSobrenome"], $nome);
-        $mensagem = str_replace('[mensagem]', $array["mensagem"], $nomeSobre);
+        
+        foreach ($arra as $key => $value) {
+            $conteudo = str_replace([$key], $value , $conteudo);
+        }
 
-        $this->mail->msgHTML($mensagem);
-
+        $this->mail->msgHTML($conteudo);
+        
         fclose($email);
 
         //Necessário ajustar para orientação a objeto, utilizar uma função já criada acima 'parserString()'

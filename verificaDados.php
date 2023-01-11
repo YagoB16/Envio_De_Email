@@ -23,7 +23,7 @@ class validaDados{
             $erro = array();
             
             $nomeSobrenome =  (explode(" ", trim($_POST['nome'])));
-
+            
             
             //Validar nome
             if (
@@ -34,6 +34,7 @@ class validaDados{
                 (!preg_match("/^[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑA-Z-' ]*$/",$nomeSobrenome[0]))
             ) {
                 $this->erro[] = 'Insira um nome válido';
+            
             }
 
 
@@ -54,6 +55,7 @@ class validaDados{
                 (!preg_match("/^[a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑA-Z-' ]*$/", $_POST['nome']))
             ){
                 $this->erro[]= 'Caracteres digitados inválidos';
+            
             }
 
 
@@ -64,6 +66,7 @@ class validaDados{
                 ($this->valida_email($_POST['email']) == false)
             ) {
                 $this->erro[] = 'Email inválido';
+                
             }
 
 
@@ -73,6 +76,7 @@ class validaDados{
                 (empty($_POST['assunto']))
             ) {
                 $this->erro[] = 'Informe o assunto';
+                
             }
 
 
@@ -85,9 +89,10 @@ class validaDados{
 
             }
 
+            
 
             /* validar os outros */
-
+            
             /*if (!isset($this->erro)) {
                 $dadosEnvio = array();
 
@@ -100,7 +105,8 @@ class validaDados{
                 $this->dadosEnvio['name'] = $this->parserString($this->dadosEnvio['name'], $_POST['nome']);
                 $this->dadosEnvio['email'] = $this->parserString($this->dadosEnvio['email'], $_POST['email']);
                 $this->dadosEnvio['subject'] = $this->parserString($this->dadosEnvio['subject'], $_POST['assunto']);
-                $this->dadosEnvio['message'] = $this->parserString($this->dadosEnvio['message'], $_POST['mensagem']); 
+                $this->dadosEnvio['message'] = $this->parserString($this->dadosEnvio['message'], $_POST['mensagem']);
+               
                 
             }*/
         };

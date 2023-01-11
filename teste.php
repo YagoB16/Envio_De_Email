@@ -9,7 +9,7 @@ class teste{
     public function parserString($array, $string)
     {
         foreach ($array as $key => $value) {
-            $string = str_replace( $value,  '[ . $key . ]', $string);
+            $string = str_replace([$value], [$key], $string);
         }
         return $string;
     }
@@ -29,15 +29,12 @@ $arra =[
 $email = fopen('./template.html', 'r+');
 
 $conteudo = fread($email, filesize('./template.html'));
+$text = new teste();
+$texto = $text->parserString($arra, $conteudo);
 
 
-foreach ($arra as $key => $value) {
 
-    $conteudo = str_replace([$key], $value , $conteudo);
-    
-}
-
-var_dump($conteudo) ;
+var_dump($texto) ;
 
 
 fclose($email);
