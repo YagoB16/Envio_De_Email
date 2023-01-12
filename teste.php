@@ -9,7 +9,7 @@ class teste{
     public function parserString($array, $string)
     {
         foreach ($array as $key => $value) {
-            $string = str_replace([$value], [$key], $string);
+            $string = str_replace([$key], $value, $string);
         }
         return $string;
     }
