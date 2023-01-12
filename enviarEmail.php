@@ -23,31 +23,33 @@ class EnviarEmail extends PHPMailer
         $this->envioSmtp();
     }
 
-    protected function parserString($array)
+    public function parserString($array, $string)
     {
         $string = '';
         foreach ($array as $key => $value) {
-            $string .= str_replace('[' . $key . ']', $value, $string);
+            
+            $string = str_replace([$key], $value, $string);
+            
         }
         return $string;
     }
 
     protected function envioSmtp()
     {
+
         //Caso não tenha erro irá executar 
         if (!isset($this->erro)) {
-            $erro = array();
-            $nomeSobrenome = $_POST['nome'];
 
-            $this->dadosEnvio['nomeSobrenome'] = $_POST['nome'];
+            $primeiroNome =  (explode(" ", trim($_POST['nome'])));
 
-            //$this->dadosEnvio['name'] = $nomeSobrenome[1]; Ajustar para trazer apenas o nome
+            $this->dadosEnvio['nome_sobrenome'] = $_POST['nome'];
+
+            $this->dadosEnvio['nome'] = $primeiroNome[0]; //Ajustar para trazer apenas o nome
 
             $this->dadosEnvio['email'] = $_POST['email'];
             $this->dadosEnvio['subject'] = $_POST['assunto'];
             $this->dadosEnvio['message'] = $_POST['mensagem'];
         }
-
 
         $this->mail = new PHPMailer(true);
         $this->mail->CharSet = 'UTF-8';
@@ -58,6 +60,7 @@ class EnviarEmail extends PHPMailer
         $this->mail->Password = MAIL_PASS;
         $this->mail->Port = MAIL_PORT;
         $this->mail->Host = MAIL_HOST;
+        
 
         //Define o Remetente
         $this->mail->setFrom('goyagoba@gmail.com', 'Inscrição Realizada');
@@ -83,28 +86,40 @@ class EnviarEmail extends PHPMailer
         $this->mail->isHTML(true);
 
 
-        //Incluir arquivo com html para email
 
-        $arra = array(
-            '[nome]' => $this->dadosEnvio['name'],
-            '[nome_sobrenome]' => $this->dadosEnvio['nomeSobrenome'],
-            '[mensagem]' => $this->dadosEnvio['message']
-        );
+        //Incluir arquivo com html para email
+        $arra = [
+            '[nome]' => $this->dadosEnvio['nome'],
+            '[mensagem]' => $this->dadosEnvio['message'],
+            '[nome_sobrenome]' => $this->dadosEnvio['nome_sobrenome']
+        ];
+
+        $this->mail = new EnviarEmail(true);
 
         $email = fopen('./template.html', 'r+');
-        $conteudo = fread($email, filesize('./template.html'));
-        
-        foreach ($arra as $key => $value) {
-            $conteudo = str_replace([$key], $value , $conteudo);
-        }
 
-        $this->mail->msgHTML($conteudo);
+        $conteudo = fread($email, filesize('./template.html'));
+        fclose($conteudo);
+        $texto = $this->parserString($arra, $conteudo);
+
         
-        fclose($email);
+
+        $this->mail->body($texto);
+
+        
 
         //Necessário ajustar para orientação a objeto, utilizar uma função já criada acima 'parserString()'
+        /*
+        $email = fopen('./teste.html', 'r+');
+        $this->conteudo = fread($email, filesize('./teste.html'));
+        fclose($email);
 
+        $this->conteudo = $this->mail->parserString($nome, $this->conteudo);
 
+        $mensagem = $this->conteudo;
+
+        $this->mail->msgHTML($mensagem);
+        */
 
         if (!$this->mail->send()) {
             echo 'Não foi possível enviar a mensagem.<br>';
