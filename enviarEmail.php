@@ -12,8 +12,8 @@ require_once __DIR__ . './enviarEmail.php';
 
 define('MAIL_HOST', 'smtp.gmail.com');
 define('MAIL_PORT', 587);
-define('MAIL_USER', 'goyagoba@gmail.com');
-define('MAIL_PASS', 'zvywklzxbjurcwcn');
+define('MAIL_USER', '');
+define('MAIL_PASS', '');
 
 class EnviarEmail extends PHPMailer
 {
